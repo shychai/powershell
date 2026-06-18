@@ -18,8 +18,8 @@ function Extract-Archive {
     if (Test-Path -LiteralPath $ArchivePath -PathType Leaf) {
         $Item = Get-Item -LiteralPath $ArchivePath
 
-        $Parent = $Item.DirectoryName
-        $LeafBase = [System.IO.Path]::GetFileNameWithoutExtension($Item.Name)
+        $Parent = Split-Path $ArchivePath -Parent
+        $LeafBase = Split-Path $ArchivePath -LeafBase
 
         if ($UseFolder) {
             $OutputPath = Join-Path $Parent $LeafBase
