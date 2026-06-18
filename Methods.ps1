@@ -1,3 +1,5 @@
+. .\Globals.ps1
+
 function Get-FilesByFormat {
     param(
         [string]$Path,
@@ -9,7 +11,7 @@ function Get-FilesByFormat {
         }
 }
 
-function Extract-Archive {
+function Extract-Archives {
     param(
         [string]$ArchivePath,
         [string]$Destination,
@@ -44,10 +46,48 @@ function Extract-Archive {
             $_.Extension -in $Formats.Archives
         } |
         ForEach-Object {
-            Extract-Archive $_.FullName -Destination:$Destination -UseFolder:$UseFolder
+            Extract-Archives $_.FullName -Destination:$Destination -UseFolder:$UseFolder
         }
     }
     else {
         Write-Host "Path not found: $ArchivePath"
     }
+}
+
+function Flatten-Folder {
+    param(
+        [string]$RootPath
+    )
+
+    Get-ChildItem -LiteralPath $RootPath -File -Recurse |
+    Where-Object {
+        $_.DirectoryName -ne $RootPath
+    } |
+    ForEach-Object {
+        Move-Item -LiteralPath $_.FullName -Destination $RootPath
+    }
+
+    Get-ChildItem -LiteralPath $RootPath -Directory | 
+    ForEach-Object {
+        Remove-Item -LiteralPath $_.FullName
+    }
+}
+
+function Test-FolderContains {
+    param(
+        [string]$Path,
+        [string[]]$Patterns
+    )
+
+    $FolderName = Split-Path $Path -Leaf
+    $PatternText = $Patterns -join "|"
+
+    foreach ($File in (Get-ChildItem -LiteralPath $Path -File)) {
+        if ($File.Name -match $PatternText) {
+            # Write-Host "$FolderName TRUE"
+            return
+        }
+    }
+
+    Write-Host "$FolderName FALSE"
 }

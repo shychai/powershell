@@ -1,3 +1,2 @@
-. .\Functions.ps1
 . .\Globals.ps1
-
+. .\Methods.ps1
