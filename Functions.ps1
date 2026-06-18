@@ -12,6 +12,7 @@ function Get-FilesByFormat {
 function Extract-Archive {
     param(
         [string]$ArchivePath,
+        [string]$Destination,
         [switch]$UseFolder
     )
 
@@ -19,14 +20,18 @@ function Extract-Archive {
         $Parent = Split-Path $ArchivePath -Parent
         $LeafBase = Split-Path $ArchivePath -LeafBase
 
-        if ($UseFolder) {
+        if ($Destination) {
+            $OutputPath = $Destination
+            New-Item -ItemType Directory -Path $OutputPath
+        }
+        elseif ($UseFolder) {
             $OutputPath = Join-Path $Parent $LeafBase
         }
         else {
             $OutputPath = $Parent
         }
 
-        & $Tools.SevZip x $Item.FullName "-o$OutputPath" -y
+        & $Tools.SevZip x $ArchivePath "-o$OutputPath" -y
     }
 
     elseif (Test-Path -LiteralPath $ArchivePath -PathType Container) {
@@ -35,7 +40,7 @@ function Extract-Archive {
             $_.Extension -in $Formats.Archives
         } |
         ForEach-Object {
-            Extract-Archive $_.FullName -UseFolder:$UseFolder
+            Extract-Archive $_.FullName -Destination:$Destination -UseFolder:$UseFolder
         }
     }
     else {
