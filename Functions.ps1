@@ -4,7 +4,7 @@ function Get-FilesByFormat {
         [string[]]$Formats
     )
 
-    Get-ChildItem $Path | Where-Object {
+    Get-ChildItem $Path -File | Where-Object {
         $_.Extension -in $Formats
         }
 }
@@ -17,14 +17,18 @@ function Extract-Archive {
     )
 
     if (Test-Path -LiteralPath $ArchivePath -PathType Leaf) {
-        $Parent = Split-Path $ArchivePath -Parent
+        
         $LeafBase = Split-Path $ArchivePath -LeafBase
 
         if ($Destination) {
-            $OutputPath = $Destination
             New-Item -ItemType Directory -Path $OutputPath
+            $Parent = $Destination
         }
-        elseif ($UseFolder) {
+        else {
+            $Parent = Split-Path $ArchivePath -Parent
+        }
+        
+        if ($UseFolder) {
             $OutputPath = Join-Path $Parent $LeafBase
         }
         else {
