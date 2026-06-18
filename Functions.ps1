@@ -16,8 +16,6 @@ function Extract-Archive {
     )
 
     if (Test-Path -LiteralPath $ArchivePath -PathType Leaf) {
-        $Item = Get-Item -LiteralPath $ArchivePath
-
         $Parent = Split-Path $ArchivePath -Parent
         $LeafBase = Split-Path $ArchivePath -LeafBase
 
