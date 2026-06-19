@@ -1,16 +1,4 @@
 . .\Globals.ps1
-
-function Get-FilesByFormat {
-    param(
-        [string]$Path,
-        [string[]]$Formats
-    )
-
-    Get-ChildItem $Path -File | Where-Object {
-        $_.Extension -in $Formats
-        }
-}
-
 function Extract-Archives {
     param(
         [string]$ArchivePath,
@@ -73,6 +61,16 @@ function Flatten-Folder {
     }
 }
 
+function Get-FilesByFormat {
+    param(
+        [string]$Path,
+        [string[]]$Formats
+    )
+
+    Get-ChildItem $Path -File | Where-Object {
+        $_.Extension -in $Formats
+        }
+}
 function Test-FolderContains {
     param(
         [string]$Path,
@@ -91,3 +89,4 @@ function Test-FolderContains {
 
     Write-Host "$FolderName FALSE"
 }
+
