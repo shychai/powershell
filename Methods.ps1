@@ -71,6 +71,22 @@ function Get-FilesByFormat {
         $_.Extension -in $Formats
         }
 }
+
+function Remove-FilesByFormat {
+    param(
+        [string]$Path,
+        [string[]]$Formats
+    )
+
+    Get-ChildItem -LiteralPath $Path -File | 
+    Where-Object {
+        $_.Extension -in $Formats
+    } | 
+    ForEach-Object {
+        Remove-Item -LiteralPath $_.FullName
+        }
+}
+
 function Test-FolderContains {
     param(
         [string]$Path,
