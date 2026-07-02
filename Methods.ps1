@@ -87,6 +87,21 @@ function Remove-FilesByFormat {
         }
 }
 
+function Remove-FilesByMatch {
+    param(
+        [string]$Path,
+        [string]$MatchString
+    )
+    
+    Get-ChildItem -LiteralPath $Path -File |
+    Where-Object {
+        $_.Name -match $MatchString
+    } |
+    ForEach-Object {
+        Remove-Item -LiteralPath $_.FullName
+    }
+}
+
 function Test-FolderContains {
     param(
         [string]$Path,

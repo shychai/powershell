@@ -1,5 +1,6 @@
 . .\Globals.ps1
 . .\Methods.ps1
+. .\Z.ps1
 
 # ----------------------------------------
 # Extract Downloads Archives
